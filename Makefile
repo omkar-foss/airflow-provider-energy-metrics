@@ -24,11 +24,11 @@ endif
 
 help:
 	@printf "Available commands:\n"
-	@printf " make lock  - Lock dependencies and update uv.lock\n"
-	@printf " make build - Build package with synced virtual environment\n"
-	@printf " make test  - Run pytest suite\n"
-	@printf " make test-matrix  - Run tests for different python-airflow version combos\n"
-	@printf " make clean - Remove build artifacts and temporary cache\n"
+	@printf "  make lock         Lock dependencies and update uv.lock\n"
+	@printf "  make build        Build package with synced virtual environment\n"
+	@printf "  make test         Run pytest suite\n"
+	@printf "  make test-matrix  Run tests for different python-airflow version combos\n"
+	@printf "  make clean        Remove build artifacts and temporary cache\n"
 
 format:
 	uv run ruff format .
@@ -66,7 +66,7 @@ test-matrix:
 					continue
 				fi
 			fi
-			
+
 			# Airflow 2.9.x and 2.10.x fail for Python versions above 3.12
 			if [[ "$$airflow" == 2.9.* ]] || [[ "$$airflow" == 2.10.* ]]; then
 				if [ $$(echo "$$py > 3.12" | bc) -eq 1 ]; then
@@ -74,7 +74,7 @@ test-matrix:
 					continue
 				fi
 			fi
-			
+
 			printf "Testing: Python $$py | Airflow $$airflow\n"
 			if $(MAKE) test PYTHON_VERSION=$$py AIRFLOW_VERSION=$$airflow; then
 				results["Python $$py | Airflow $$airflow"]="PASSED"
@@ -84,15 +84,15 @@ test-matrix:
 			fi
 		done
 	done
-	
+
 	printf "\n==================================================\n"
 	printf "               MATRIX TEST REPORT                 \n"
 	printf "==================================================\n"
-	
+
 	while read -r config; do
 		# Skip empty iterations
 		[ -z "$$config" ] && continue
-		
+
 		status="$${results[$$config]}"
 		if [ "$$status" = "PASSED" ]; then
 			printf "$$config: $$status\n"
@@ -102,9 +102,9 @@ test-matrix:
 			printf "$$config: $$status\n"
 		fi
 	done < <(printf '%s\n' "$${!results[@]}" | sort -V)
-	
+
 	printf "==================================================\n"
-	
+
 	if [ $$failed -eq 1 ]; then
 		printf "Matrix test run failed. One or more configs threw errors.\n"
 		exit 1
