@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools==82.0.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "airflow-provider-energy-metrics"
+version = "0.1.0"
+description = "Airflow listener and hook to track GenAI/ML energy metrics seamlessly."
+readme = "README.md"
+authors = [{ name = "Your Name", email = "your.email@example.com" }]
+requires-python = ">=3.10"
+
+dependencies = [
+    "apache-airflow>=2.8.0,<=3.0.6",
+    "codecarbon>=2.3.0",
+    "ecologits>=0.11.0",
+]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Framework :: Apache Airflow",
+    "Framework :: Apache Airflow :: Provider",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator",
+    "Topic :: System :: Monitoring",
+]
+
+[tool.uv]
+override-dependencies = ["packaging==25.0"]
+
+[dependency-groups]
+dev = ["pytest>=8.0.0", "ruff>=0.15.17"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+# E/W = Pycodestyle errors/warnings, F = Pyflakes bugs, I = Isort import sorting
+select = ["E", "W", "F", "I"]
+ignore = []
+unfixable = []
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+lines-after-imports = 2
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+
+[tool.pytest.ini_options]
+filterwarnings = ["ignore"]
+
+[project.entry-points."apache_airflow_provider"]
+provider_info = "energy_metrics:get_provider_info"
+
+[project.entry-points."airflow.plugins"]
+energy_metrics_plugin = "energy_metrics.listener:EnergyMetricsPlugin"
