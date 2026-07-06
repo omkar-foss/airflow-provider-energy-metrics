@@ -1,17 +1,17 @@
-# Airflow Provider Energy Metrics [![Build Status](https://github.com/omkar-foss/airflow-provider-energy-metrics/actions/workflows/run_tests.yml/badge.svg)](https://github.com/omkar-foss/airflow-provider-energy-metrics/actions/workflows/run_tests.yml)
+# ⚡ Airflow Provider Energy Metrics [![Build Status](https://github.com/omkar-foss/airflow-provider-energy-metrics/actions/workflows/run_tests.yml/badge.svg)](https://github.com/omkar-foss/airflow-provider-energy-metrics/actions/workflows/run_tests.yml)
 
-An Apache Airflow plugin that tracks the energy utilization and carbon footprints of data workflows.
+Apache Airflow plugin that tracks the energy utilization and carbon footprints of data workflows.
 
-It includes an Airflow Listener (`EnergyMetricsListener`) to monitor energy consumption of your
-tasks, and a dedicated Airflow Hook (`EnergyMetricsHook`) to monitor energy consumption of API
-calls to LLM providers like OpenAI, Anthropic and others. Refer
+It provides a Airflow Listener (`EnergyMetricsListener`) to capture energy consumption metrics of
+your dag tasks instances, and a dedicated Airflow Hook (`EnergyMetricsHook`) to capture energy
+consumption metrics of API calls to LLM providers like OpenAI, Anthropic and others. Refer
 [examples below](#implementation-examples) for more info.
 
 ---
 
 ## Features
 
-- CodeCarbon event listener profiles hardware power (CPU, GPU, RAM) transparently across task
+- CodeCarbon-based event listener profiles hardware power (CPU, GPU, RAM) transparently across task
   lifecycles.
 - Ecologits-based Context-manager hook isolates, tracks, and safely unpatches third-party generative
   AI/LLM network queries.
@@ -47,7 +47,7 @@ on your provisioned hardware using CodeCarbon. See
 [example 1](#example-1-automated-lifecycle-listener-codecarbon) below.
 
 To explicitly capture energy metrics for remote API calls to LLM providers, use `EnergyMetricsHook`.
-See [example 2](#example-2-explicit-context-hooks-ecologits--remote-apis) below.
+See [example 2](#example-2-explicit-context-hooks-ecologits--remote-llm-apis) below.
 
 ### Implementation Examples
 
@@ -76,7 +76,7 @@ with DAG(
     )
 ```
 
-#### Example 2: Explicit Context Hooks (EcoLogits & Remote APIs)
+#### Example 2: Explicit Context Hooks (EcoLogits & Remote LLM APIs)
 
 Use this method to safely isolate execution scope for external network calls
 running within an operator.
@@ -101,6 +101,8 @@ def llm_processing_pipeline(**context):
             messages=[{"role": "user", "content": "Calculate the universe"}]
         )
         print(response.choices.message.content)
+
+        # Use this function to capture and push the energy metrics to XCom
         energy_metrics_hook.push_energy_metrics_xcom(response)
 
 
