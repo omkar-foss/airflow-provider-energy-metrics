@@ -1,4 +1,5 @@
-# Airflow Provider Energy Metrics
+# Airflow Provider Energy Metrics [![Build Status](https://github.com/omkar-foss/airflow-provider-energy-metrics/actions/workflows/run_tests.yml/badge.svg)](https://github.com/omkar-foss/airflow-provider-energy-metrics/actions/workflows/run_tests.yml)
+
 
 An Apache Airflow plugin that tracks the energy utilization and carbon footprints of data workflows.
 
