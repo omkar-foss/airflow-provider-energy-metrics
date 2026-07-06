@@ -1,6 +1,5 @@
 # Airflow Provider Energy Metrics [![Build Status](https://github.com/omkar-foss/airflow-provider-energy-metrics/actions/workflows/run_tests.yml/badge.svg)](https://github.com/omkar-foss/airflow-provider-energy-metrics/actions/workflows/run_tests.yml)
 
-
 An Apache Airflow plugin that tracks the energy utilization and carbon footprints of data workflows.
 
 It includes an Airflow Listener (`EnergyMetricsListener`) to monitor energy consumption of your
@@ -79,8 +78,8 @@ with DAG(
 
 #### Example 2: Explicit Context Hooks (EcoLogits & Remote APIs)
 
-Use this method to safely isolate, log, and un-patch monkey-wrapped execution scopes for external
-network calls running within an operator.
+Use this method to safely isolate execution scope for external network calls
+running within an operator.
 
 ```python
 import openai
@@ -94,7 +93,7 @@ def llm_processing_pipeline(**context):
     ti = context["ti"]
 
     # Open the thread-safe remote tracking window
-    with EnergyMetricsHook(task_instance=ti):
+    with EnergyMetricsHook(task_instance=ti) as energy_metrics_hook:
         print("Starting cloud model processing step...")
         client = openai.OpenAI()
         response = client.chat.completions.create(
@@ -102,6 +101,8 @@ def llm_processing_pipeline(**context):
             messages=[{"role": "user", "content": "Calculate the universe"}]
         )
         print(response.choices.message.content)
+        energy_metrics_hook.push_energy_metrics_xcom(response)
+
 
 with DAG(
     dag_id="sustainability_explicit_hooks",
@@ -118,8 +119,8 @@ with DAG(
 
 ## Exported Metrics Reference (XCom)
 
-When a tracked task completes execution, the plugin extracts all telemetry data from the active
-tracking context and exports it to the Airflow XCom metadata storage layer under explicit keys.
+When a tracked task completes, the plugin extracts all telemetry data from the active
+tracking context and exports it to Airflow XCom metadata storage layer under explicit keys.
 
 ### Listener Metrics (`key="codecarbon_energy_metrics"`)
 
