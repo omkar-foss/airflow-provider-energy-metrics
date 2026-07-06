@@ -18,8 +18,6 @@ calls to LLM providers like OpenAI, Anthropic and others. Refer
 - Aggregates and pushes structuralized telemetry datasets into native Airflow XCom variables.
 - Built to capture execution parameters cleanly across Airflow versions 2.8 to 3.1.
 
----
-
 ## Installation
 
 Install the package directly inside your Airflow environment or append it to your project
@@ -38,8 +36,6 @@ After installation is complete, confirm the plugin is running successfully on yo
 3. Verify that `energy_metrics_plugin` is registered under the active plugin catalog table and shows
    its associated lifecycle listener hooks running.
 
----
-
 ## How to Use
 
 Upon installing, **listener runs automatically** on all tasks across your DAG execution
@@ -52,8 +48,6 @@ on your provisioned hardware using CodeCarbon. See
 
 To explicitly capture energy metrics for remote API calls to LLM providers, use `EnergyMetricsHook`.
 See [example 2](#example-2-explicit-context-hooks-ecologits--remote-apis) below.
-
----
 
 ### Implementation Examples
 
@@ -120,8 +114,6 @@ with DAG(
         python_callable=llm_processing_pipeline,
     )
 ```
-
----
 
 ## Exported Metrics Reference (XCom)
 
