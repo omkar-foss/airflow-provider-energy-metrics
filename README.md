@@ -11,7 +11,8 @@ calls to LLM providers like OpenAI, Anthropic and others. Refer
 
 ## Features
 
-- CodeCarbon event listener profiles hardware power (CPU, GPU, RAM) transparently across task lifecycles.
+- CodeCarbon event listener profiles hardware power (CPU, GPU, RAM) transparently across task
+  lifecycles.
 - Ecologits-based Context-manager hook isolates, tracks, and safely unpatches third-party generative
   AI/LLM network queries.
 - Aggregates and pushes structuralized telemetry datasets into native Airflow XCom variables.
@@ -21,11 +22,21 @@ calls to LLM providers like OpenAI, Anthropic and others. Refer
 
 ## Installation
 
-Install the package directly inside your Airflow environment or append it to your project requirements file:
+Install the package directly inside your Airflow environment or append it to your project
+requirements file:
 
 ```bash
 pip install git+https://github.com/omkar-foss/airflow-provider-energy-metrics
 ```
+
+## Verification
+
+After installation is complete, confirm the plugin is running successfully on your instance:
+
+1. Log in to your Airflow Web UI.
+2. Navigate to the top navigation bar and select **Admin** then click **Plugins**.
+3. Verify that `energy_metrics_plugin` is registered under the active plugin catalog table and shows
+   its associated lifecycle listener hooks running.
 
 ---
 
@@ -48,7 +59,8 @@ See [example 2](#example-2-explicit-context-hooks-ecologits--remote-apis) below.
 
 #### Example 1: Automated Lifecycle Listener (CodeCarbon)
 
-This approach automatically instruments your steps without altering your core processing python execution functions or requiring parameter flags.
+This approach automatically instruments your steps without altering your core processing python
+execution functions or requiring parameter flags.
 
 ```python
 from datetime import datetime
@@ -72,7 +84,8 @@ with DAG(
 
 #### Example 2: Explicit Context Hooks (EcoLogits & Remote APIs)
 
-Use this method to safely isolate, log, and un-patch monkey-wrapped execution scopes for external network calls running within an operator.
+Use this method to safely isolate, log, and un-patch monkey-wrapped execution scopes for external
+network calls running within an operator.
 
 ```python
 import openai
@@ -112,11 +125,13 @@ with DAG(
 
 ## Exported Metrics Reference (XCom)
 
-When a tracked task completes execution, the plugin extracts all telemetry data from the active tracking context and exports it to the Airflow XCom metadata storage layer under explicit keys.
+When a tracked task completes execution, the plugin extracts all telemetry data from the active
+tracking context and exports it to the Airflow XCom metadata storage layer under explicit keys.
 
 ### Listener Metrics (`key="codecarbon_energy_metrics"`)
 
-Automated backend outputs pushing comprehensive system telemetry dictionaries (with standard fallbacks to standalone `emissions_kgCO2eq` targets if hardware blocks reporting):
+Automated backend outputs pushing comprehensive system telemetry dictionaries (with standard
+fallbacks to standalone `emissions_kgCO2eq` targets if hardware blocks reporting):
 
 ```json
 {
@@ -169,13 +184,3 @@ Structured payloads pushed directly via TaskInstance context abstractions:
   "remote_api_output_tokens": 420
 }
 ```
-
----
-
-## Verification
-
-To confirm the plugin is running successfully on your instance:
-
-1. Log in to your Airflow Web UI.
-2. Navigate to the top navigation bar and select **Admin** then click **Plugins**.
-3. Verify that `energy_metrics_plugin` is registered under the active plugin catalog table and shows its associated lifecycle listener hooks running.
