@@ -180,3 +180,7 @@ Structured payloads pushed directly via TaskInstance context abstractions:
   "remote_api_output_tokens": 420
 }
 ```
+
+## License
+
+This project is licensed under [Apache License 2.0](LICENSE).
