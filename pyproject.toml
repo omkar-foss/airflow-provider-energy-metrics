@@ -29,9 +29,6 @@ classifiers = [
     "Topic :: System :: Monitoring",
 ]
 
-[tool.uv]
-override-dependencies = ["packaging>=23.2,<=25.0"]
-
 [dependency-groups]
 dev = ["pytest>=8.0.0", "ruff>=0.15.17"]
 
