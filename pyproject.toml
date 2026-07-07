@@ -30,7 +30,7 @@ classifiers = [
 ]
 
 [dependency-groups]
-dev = ["pytest>=8.0.0", "ruff>=0.15.17"]
+dev = ["pytest>=7.4.3,<=8.3.5", "ruff>=0.1.8,<=0.11.2"]
 
 [tool.ruff]
 target-version = "py310"

@@ -33,7 +33,6 @@ def test_hook_context_lifecycle_and_xcom_push(mock_ecologits, session=None):
             "pe": {"value": 0.02},
         },
         "embodied": {
-            "wcf": {"value": 0.003},
             "gwp": {"value": 0.0004},
             "adpe": {"value": 3e-08},
             "pe": {"value": 0.02},
@@ -86,10 +85,62 @@ def test_hook_context_lifecycle_and_xcom_push(mock_ecologits, session=None):
     assert metrics is not None, (
         "Hook failed to push metrics payload into Airflow XCom database backend."
     )
+
     assert metrics == {
-        "energy_consumed_kwh": 0.004,
-        "global_warming_potential_kgCO2eq": 0.002,
-        "abiotic_depletion_potential_kgSbeq": 3e-8,
-        "primary_energy_consumed_megajoules": 0.04,
-        "water_consumption_footprint_litres": 0.004,
+        "energy": {"type": "energy", "name": "Energy", "value": 0.004, "unit": "kWh"},
+        "gwp": {
+            "type": "GWP",
+            "name": "Global Warming Potential",
+            "value": 0.002,
+            "unit": "kgCO2eq",
+        },
+        "adpe": {
+            "type": "ADPe",
+            "name": "Abiotic Depletion Potential (elements)",
+            "value": 3e-08,
+            "unit": "kgSbeq",
+        },
+        "pe": {"type": "PE", "name": "Primary Energy", "value": 0.04, "unit": "MJ"},
+        "wcf": {"type": "WCF", "name": "Water Consumption Footprint", "value": 0.004, "unit": "L"},
+        "usage": {
+            "type": "usage",
+            "name": "Usage",
+            "energy": {"type": "energy", "name": "Energy", "value": 0.004, "unit": "kWh"},
+            "gwp": {
+                "type": "GWP",
+                "name": "Global Warming Potential",
+                "value": 0.0016,
+                "unit": "kgCO2eq",
+            },
+            "adpe": {
+                "type": "ADPe",
+                "name": "Abiotic Depletion Potential (elements)",
+                "value": 0.0,
+                "unit": "kgSbeq",
+            },
+            "pe": {"type": "PE", "name": "Primary Energy", "value": 0.02, "unit": "MJ"},
+            "wcf": {
+                "type": "WCF",
+                "name": "Water Consumption Footprint",
+                "value": 0.001,
+                "unit": "L",
+            },
+        },
+        "embodied": {
+            "type": "embodied",
+            "name": "Embodied",
+            "gwp": {
+                "type": "GWP",
+                "name": "Global Warming Potential",
+                "value": 0.0004,
+                "unit": "kgCO2eq",
+            },
+            "adpe": {
+                "type": "ADPe",
+                "name": "Abiotic Depletion Potential (elements)",
+                "value": 3e-08,
+                "unit": "kgSbeq",
+            },
+            "pe": {"type": "PE", "name": "Primary Energy", "value": 0.02, "unit": "MJ"},
+        },
     }

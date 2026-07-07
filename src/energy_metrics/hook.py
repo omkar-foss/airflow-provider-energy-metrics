@@ -47,15 +47,9 @@ class EnergyMetricsHook(BaseHook):
                 raise ValueError(
                     f"{self._log_label} Ecologits impacts payload not found in response."
                 )
-
-            energy_metrics = {
-                "energy_consumed_kwh": impacts.energy.value,
-                "global_warming_potential_kgCO2eq": impacts.gwp.value,
-                "abiotic_depletion_potential_kgSbeq": impacts.adpe.value,
-                "primary_energy_consumed_megajoules": impacts.pe.value,
-                "water_consumption_footprint_litres": impacts.wcf.value,
-            }
-
+            energy_metrics = (
+                impacts.model_dump() if hasattr(impacts, "model_dump") else impacts.dict()
+            )
             self.task_instance.xcom_push(key="ecologits_energy_metrics", value=energy_metrics)
             LOGGER.info(
                 f"{self._log_label} Metrics for Task Instance ID {self.task_instance.task_id}: "

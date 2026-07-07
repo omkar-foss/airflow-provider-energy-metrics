@@ -16,16 +16,19 @@ consumption metrics of API calls to LLM providers like OpenAI, Anthropic and oth
 - Ecologits-based Context-manager hook isolates, tracks, and safely unpatches third-party generative
   AI/LLM network queries.
 - Aggregates and pushes structuralized telemetry datasets into native Airflow XCom variables.
-- Built to capture execution parameters cleanly across Airflow versions 2.8 to 3.1.
+- Built to capture execution parameters cleanly across Airflow versions 2.8.1 to 3.0.0.
 
 ## Installation
 
-Install the package directly inside your Airflow environment or append it to your project
-requirements file:
+Install this provider either by baking this install command into your Airflow docker image:
 
 ```bash
-pip install git+https://github.com/omkar-foss/airflow-provider-energy-metrics
+RUN uv pip install git+https://github.com/omkar-foss/airflow-provider-energy-metrics \
+    --constraints https://raw.githubusercontent.com/apache/airflow/constraints-3.0.0/constraints-3.10.txt
 ```
+
+Replace the constraints file link above with your Airflow and Python version, format of Airflow's
+constraints files is `https://raw.githubusercontent.com/apache/airflow/constraints-<YOUR_AIRFLOW_VERSION>/constraints-<YOUR_PYTHON_VERSION>.txt`.
 
 ## Verification
 
@@ -131,40 +134,40 @@ fallbacks to standalone `emissions_kgCO2eq` targets if hardware blocks reporting
 
 ```json
 {
-  "timestamp": "2026-06-18T21:59:00",
-  "project_name": "codecarbon",
-  "run_id": "uuid-string",
-  "duration_secs": 45.2,
-  "emissions_kgCO2eq": 0.00123,
-  "emissions_rate_kg_per_sec": 0.000027,
-  "cpu_power_watts": 45.0,
-  "gpu_power_watts": 0.0,
-  "ram_power_watts": 12.0,
-  "cpu_energy_kwh": 0.00056,
-  "gpu_energy_kwh": 0.0,
-  "ram_energy_kwh": 0.00015,
-  "energy_consumed_kwh": 0.00071,
-  "country_name": "United States",
-  "country_iso_code": "USA",
-  "region": "eastus",
-  "on_cloud": "Y",
-  "cloud_provider": "azure",
-  "cloud_region": "eastus",
-  "os": "Linux-5.4.0",
-  "python_version": "3.11.5",
-  "codecarbon_version": "2.8.0",
-  "cpu_count": 8,
-  "cpu_model": "Intel Xeon",
-  "gpu_count": 0,
-  "gpu_model": null,
-  "longitude": -77.0369,
-  "latitude": 38.8951,
-  "ram_total_size_gb": 32.0,
-  "tracking_mode": "machine",
-  "cpu_utilization_percent": 24.5,
-  "gpu_utilization_percent": 0.0,
-  "ram_utilization_percent": 41.2,
-  "ram_used_gb": 13.18
+    "timestamp": "2026-07-07T14:19:53",
+    "project_name": "codecarbon",
+    "run_id": "87fc3ed9-f705-4fc2-b0df-5774d68c5511",
+    "duration_secs": 1.6877790899998217,
+    "emissions_kgCO2eq": 2.045025742685986e-05,
+    "emissions_rate_kg_per_sec": 1.2116667132581919e-05,
+    "cpu_power_watts": 77.0,
+    "gpu_power_watts": 0.0,
+    "ram_power_watts": 10.0,
+    "cpu_energy_kwh": 2.53807784999996e-05,
+    "gpu_energy_kwh": 0.0,
+    "ram_energy_kwh": 3.2834802500019576e-06,
+    "energy_consumed_kwh": 2.8664258750001557e-05,
+    "country_name": "France",
+    "country_iso_code": "FR",
+    "region": "paris",
+    "on_cloud": "Y",
+    "cloud_provider": "azure",
+    "cloud_region": "francecentral",
+    "os": "Linux-5.4.0",
+    "python_version": "3.12.10",
+    "codecarbon_version": "3.2.8",
+    "cpu_count": 4,
+    "cpu_model": "Intel(R) Core(TM) i7-1065G7 CPU @ 1.30GHz",
+    "gpu_count": 0,
+    "gpu_model": "1 x NVIDIA GeForce GTX 1080 Ti",
+    "longitude": 2.3,
+    "latitude": 48.6,
+    "ram_total_size_gb": 8.0,
+    "tracking_mode": "machine",
+    "cpu_utilization_percent": 24.5,
+    "gpu_utilization_percent": 2.5,
+    "ram_utilization_percent": 41.2,
+    "ram_used_gb": 13.18
 }
 ```
 
@@ -174,10 +177,62 @@ Structured payloads pushed directly via TaskInstance context abstractions:
 
 ```json
 {
-  "remote_api_co2_kg": 0.000412,
-  "remote_api_energy_wh": 0.85,
-  "remote_api_input_tokens": 1250,
-  "remote_api_output_tokens": 420
+    "energy": {"type": "energy", "name": "Energy", "value": 0.004, "unit": "kWh"},
+    "gwp": {
+        "type": "GWP",
+        "name": "Global Warming Potential",
+        "value": 0.002,
+        "unit": "kgCO2eq",
+    },
+    "adpe": {
+        "type": "ADPe",
+        "name": "Abiotic Depletion Potential (elements)",
+        "value": 3e-08,
+        "unit": "kgSbeq",
+    },
+    "pe": {"type": "PE", "name": "Primary Energy", "value": 0.04, "unit": "MJ"},
+    "wcf": {"type": "WCF", "name": "Water Consumption Footprint", "value": 0.004, "unit": "L"},
+    "usage": {
+        "type": "usage",
+        "name": "Usage",
+        "energy": {"type": "energy", "name": "Energy", "value": 0.004, "unit": "kWh"},
+        "gwp": {
+            "type": "GWP",
+            "name": "Global Warming Potential",
+            "value": 0.0016,
+            "unit": "kgCO2eq",
+        },
+        "adpe": {
+            "type": "ADPe",
+            "name": "Abiotic Depletion Potential (elements)",
+            "value": 0.0,
+            "unit": "kgSbeq",
+        },
+        "pe": {"type": "PE", "name": "Primary Energy", "value": 0.02, "unit": "MJ"},
+        "wcf": {
+            "type": "WCF",
+            "name": "Water Consumption Footprint",
+            "value": 0.001,
+            "unit": "L",
+        },
+    },
+    "embodied": {
+        "type": "embodied",
+        "name": "Embodied",
+        "gwp": {
+            "type": "GWP",
+            "name": "Global Warming Potential",
+            "value": 0.0004,
+            "unit": "kgCO2eq",
+        },
+        "adpe": {
+            "type": "ADPe",
+            "name": "Abiotic Depletion Potential (elements)",
+            "value": 3e-08,
+            "unit": "kgSbeq",
+        },
+        "pe": {"type": "PE", "name": "Primary Energy", "value": 0.02, "unit": "MJ"},
+    },
 }
 ```
 
