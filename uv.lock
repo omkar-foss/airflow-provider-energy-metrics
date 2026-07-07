@@ -18,7 +18,7 @@ resolution-markers = [
 ]
 
 [manifest]
-overrides = [{ name = "packaging", specifier = "==25.0" }]
+overrides = [{ name = "packaging", specifier = ">=23.2,<=25.0" }]
 
 [[package]]
 name = "a2wsgi"
