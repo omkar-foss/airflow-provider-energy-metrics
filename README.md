@@ -22,7 +22,7 @@ List of support Airflow versions with corresponding Python versions support as b
 the list of versions checked in this provider's CI tests:
 
 | Airflow Version | Python 3.10 | Python 3.11 | Python 3.12 | Python 3.13 |
-| :--- | :---: | :---: | :---: | :---: | :---: |
+| :--- | :---: | :---: | :---: | :---: |
 | **2.8.2** | ✅ | ✅ | ❌ | ❌ |
 | **2.9.0** | ✅ | ✅ | ✅ | ❌ |
 | **2.9.3** | ✅ | ✅ | ✅ | ❌ |
