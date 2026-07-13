@@ -18,7 +18,21 @@ consumption metrics of API calls to LLM providers like OpenAI, Anthropic and oth
 
 ## Supported Versions
 
-Current supported and tested versions are Airflow 2.8.1 to 3.0.0.
+List of support Airflow versions with corresponding Python versions support as below, this is also
+the list of versions checked in this provider's CI tests:
+
+| Airflow Version | Python 3.10 | Python 3.11 | Python 3.12 | Python 3.13 |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **2.8.2** | ✅ | ✅ | ❌ | ❌ |
+| **2.9.0** | ✅ | ✅ | ✅ | ❌ |
+| **2.9.3** | ✅ | ✅ | ✅ | ❌ |
+| **2.10.1** | ✅ | ✅ | ✅ | ❌ |
+| **2.10.5** | ✅ | ✅ | ✅ | ❌ |
+| **2.11.0** | ✅ | ✅ | ✅ | ❌ |
+| **3.0.0** | ✅ | ✅ | ✅ | ❌ |
+| **3.0.6** | ✅ | ✅ | ✅ | ❌ |
+| **3.1.2** | ✅ | ✅ | ✅ | ✅ |
+| **3.1.6** | ✅ | ✅ | ✅ | ✅ |
 
 ## Installation
 
